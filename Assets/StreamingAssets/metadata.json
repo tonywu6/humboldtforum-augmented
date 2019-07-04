@@ -1,14 +1,16 @@
 {
-	"exhibits": {
-		"1994.245.135": {
-			"indices": {
-				"id": "1994.245.135",
-				"locationIdentifier": [313, 13, 16, 24, 0.0701314966, 0.8995192308],
-				"type": "exhibit"
+	"objects": [{
+			"id": "1994.245.135",
+			"geometry": {
+				"position": [0.0701314966, 0.751, -0.8995192308]
 			},
+			"type": "exhibit",
 			"description": {
 				"name": "Nandi",
 				"desc": "The elaborately designed, lifelike reproduction of a white Zebur bull is not just any old bull: in Hinduism the humped bull Nandi is the companion and devout follower of Shiva, one of the main Hindu deities, which many faithful consider to be the manifestation of the Most High. In pictures Nandi is often depicted in the immediate proximity of his lord or as his mount. His exemplary proximity to Shiva also made him an object of veneration."
+			},
+			"relationship": {
+				"children": []
 			},
 			"curatorial": {
 				"classification": "sculpture",
@@ -22,15 +24,18 @@
 				]
 			}
 		},
-		"1997.1.127": {
-			"indices": {
-				"id": "1997.1.127",
-				"locationIdentifier": [313, 27, 11, 30.6, 0.0695053225, 0.7375],
-				"type": "exhibit"
+		{
+			"id": "1997.1.127",
+			"geometry": {
+				"position": [0.0695053225, 0.751, -0.7375]
 			},
+			"type": "exhibit",
 			"description": {
 				"name": "Vishnu",
 				"desc": "In Hindusim, Vishnu is one of the most important male gods. He is considered to be a preserver: when the world is in turmoil he descends as an avatar and intervenes to save things. The faithful venerate the almost life-sized figure of a deity that radiates a profound peace and a sovereign imperturbability."
+			},
+			"relationship": {
+				"children": []
 			},
 			"curatorial": {
 				"classification": "sculpture",
@@ -44,15 +49,18 @@
 				]
 			}
 		},
-		"1961.1.1": {
-			"indices": {
-				"id": "1961.1.1",
-				"locationIdentifier": [300, 69, 69, 69, 0.3306199123, 0.47740384615384615384615384615384615384615384615385],
-				"type": "exhibit"
+		{
+			"id": "1961.1.1",
+			"geometry": {
+				"position": [0.3306199123, 0.751, -0.47740384615384615384615384615384615384615384615385]
 			},
+			"type": "exhibit",
 			"description": {
 				"name": "Friedrich III",
 				"desc": "This statue by the Dutch sculptor Bartholomeus Eggers depicts Prince-Elector Frederick III. Standing in the Alabaster Hall of the Berlin Palace, it testified to the ruler’s elevated status as elector of the Holy Roman Empire of the German Nation. However, Frederick was no longer satisfied with this honour."
+			},
+			"relationship": {
+				"children": []
 			},
 			"curatorial": {
 				"classification": "sculpture",
@@ -66,15 +74,18 @@
 				]
 			}
 		},
-		"2003.144.141": {
-			"indices": {
-				"id": "2003.144.141",
-				"locationIdentifier": [213, 119, 30, 16, 0.2463994990607388854101440200375704445835942391985, 0.07740384615384615384615384615384615384615384615385],
-				"type": "exhibit"
+		{
+			"id": "2003.144.141",
+			"geometry": {
+				"position": [0.2463994990607388854101440200375704445835942391985, 0.501, -0.07740384615384615384615384615384615384615384615385]
 			},
+			"type": "exhibit",
 			"description": {
 				"name": "Sope",
 				"desc": "The life-sized wooden figure of the god Sope has an enigmatic air – simple, faceless and at the same time with a powerful charisma, it is reminiscent of a modern work of art. It originally stood in a temple on Nukuoro, a Polynesian exclave in Micronesia. During the month-long harvest festival the figure was one of several to be decorated with flowers and presented with fruit and other food as sacrificial offerings."
+			},
+			"relationship": {
+				"children": []
 			},
 			"curatorial": {
 				"classification": "sculpture",
@@ -88,15 +99,18 @@
 				]
 			}
 		},
-		"1979.12.3": {
-			"indices": {
-				"id": "1979.12.3",
-				"locationIdentifier": [200, 69, 69, 69, 0.35284909204758922980588603631809643080776455854728, 0.47740384615384615384615384615384615384615384615385],
-				"type": "exhibit"
+		{
+			"id": "1979.12.3",
+			"geometry": {
+				"position": [0.35284909204758922980588603631809643080776455854728, 0.501, -0.47740384615384615384615384615384615384615384615385]
 			},
+			"type": "exhibit",
 			"description": {
 				"name": "Guten Tag",
 				"desc": "In the mid-1970s the East German (GDR) government commissioned sixteen established artists to produce paintings for the gallery in the Palast der Republik. Wolfgang Mattheuer, one of the most well-known and independent painters in East Germany, was among the participants in this prestigious project. However, he contributed a picture that could be interpreted as a critique of undesirable social and political developments."
+			},
+			"relationship": {
+				"children": []
 			},
 			"curatorial": {
 				"classification": "painting",
@@ -110,15 +124,18 @@
 				]
 			}
 		},
-		"2016.15.1440": {
-			"indices": {
-				"id": "2016.15.1440",
-				"locationIdentifier": [206, 6, 42, 24, 0.89542892924232936756418284283030682529743268628679, 0.23605769230769230769230769230769230769230769230769],
-				"type": "exhibit"
+		{
+			"id": "2016.15.1440",
+			"geometry": {
+				"position": [0.89542892924232936756418284283030682529743268628679, 0.501, -0.23605769230769230769230769230769230769230769230769]
 			},
+			"type": "exhibit",
 			"description": {
 				"name": "Madonna",
 				"desc": "The sublime-looking Madonna and her magnificent background are composed of countless feathers from at least thirteen different species of bird. As a work of art that fuses the pre-Columbian featherwork tradition with a Christian motif, the mosaic bears witness to the commingling of Spanish and Mexican history."
+			},
+			"relationship": {
+				"children": []
 			},
 			"curatorial": {
 				"classification": "picture, featherwork",
@@ -132,15 +149,18 @@
 				]
 			}
 		},
-		"1891.12.1": {
-			"indices": {
-				"id": "1891.12.1",
-				"locationIdentifier": [206, 18, 24, 42, 0.87069505322479649342517219787100814026299311208516, 0.30865384615384615384615384615384615384615384615385],
-				"type": "exhibit"
+		{
+			"id": "1891.12.1",
+			"geometry": {
+				"position": [0.87069505322479649342517219787100814026299311208516, 0.501, -0.30865384615384615384615384615384615384615384615385]
 			},
+			"type": "exhibit",
 			"description": {
 				"name": "Maya Krieger",
 				"desc": "The 360-degree panorama on the surface of this ceramic vase from Guatemala looks like a comic strip. The lively scene depicts a wild battle. Twelve expressively fashioned figures move in all directions, thrusting their ornate spears at each other. The cinematic-like depiction and the unique artistic quality give us an insight into the fascinating cultural history of the Maya."
+			},
+			"relationship": {
+				"children": []
 			},
 			"curatorial": {
 				"classification": "painting",
@@ -154,15 +174,18 @@
 				]
 			}
 		},
-		"1961.1.2": {
-			"indices": {
-				"id": "1961.1.2",
-				"locationIdentifier": [206, 30, 0, 0, 0.91014402003757044458359423919849718221665623043206, 0.41057692307692307692307692307692307692307692307692],
-				"type": "exhibit"
+		{
+			"id": "1961.1.2",
+			"geometry": {
+				"position": [0.91014402003757044458359423919849718221665623043206, 0.501, -0.41057692307692307692307692307692307692307692307692]
 			},
+			"type": "exhibit",
 			"description": {
 				"name": "Cuauhcoatl",
 				"desc": "By mysterious means a snake and eagle have fused to form the mythical Aztec chimera “quauhcoatl”. The feathered rattlesnake with the beak of a golden eagle is extremely well preserved and so intricately worked that every feather is visible. It takes us back to Mexico’s founding myth."
+			},
+			"relationship": {
+				"children": []
 			},
 			"curatorial": {
 				"classification": "sculpture",
@@ -176,15 +199,18 @@
 				]
 			}
 		},
-		"1961.1.4": {
-			"indices": {
-				"id": "1961.1.4",
-				"locationIdentifier": [206, 47, 277, 36, 0.87946149029430181590482154038822792736380713838447, 0.56105769230769230769230769230769230769230769230769],
-				"type": "exhibit"
+		{
+			"id": "1961.1.4",
+			"geometry": {
+				"position": [0.87946149029430181590482154038822792736380713838447, 0.501, -0.56105769230769230769230769230769230769230769230769]
 			},
+			"type": "exhibit",
 			"description": {
 				"name": "Barrigon",
 				"desc": "Barrigón – the “little potbellied one” – looks mysterious. The 800-kilogram boulder from Guatemala’s coastal lowlands probably represents a deity. At around 2,500 years old, he provides clues to a very early settlement phase in Central America."
+			},
+			"relationship": {
+				"children": []
 			},
 			"curatorial": {
 				"classification": "sculpture",
@@ -198,15 +224,18 @@
 				]
 			}
 		},
-		"1975.3.16": {
-			"indices": {
-				"id": "1975.3.16",
-				"locationIdentifier": [206, 89, 120, 6, 0.88697557921102066374452097683155917345021916092674, 0.70697557921102066374452097683155917345021916092674],
-				"type": "exhibit"
+		{
+			"id": "1975.3.16",
+			"geometry": {
+				"position": [0.88697557921102066374452097683155917345021916092674, 0.501, -0.70697557921102066374452097683155917345021916092674]
 			},
+			"type": "exhibit",
 			"description": {
 				"name": "Kazike",
 				"desc": "This elaborately fashioned example of the outstanding goldsmith’s craft of the Quimbaya from what is now Colombia probably depicts a high priest. The elevated status of the man portrayed is revealed by his rich jewellery."
+			},
+			"relationship": {
+				"children": []
 			},
 			"curatorial": {
 				"classification": "statue",
@@ -220,15 +249,18 @@
 				]
 			}
 		},
-		"1889.67.121": {
-			"indices": {
-				"id": "1889.67.121",
-				"locationIdentifier": [102, 38, 69, 69, 0.15654351909830932999373825923606762680025046963056, 0.0125],
-				"type": "exhibit"
+		{
+			"id": "1889.67.121",
+			"geometry": {
+				"position": [0.15654351909830932999373825923606762680025046963056, 0.251, -0.0125]
 			},
+			"type": "exhibit",
 			"description": {
 				"name": "Kollegheft",
 				"desc": "“=I DISPUTE THIS!=” This comment in the margin of lecture notes dating from the summer semester of 1885 reads like a proclamation. Using capital letters, equal signs and an exclamation mark, Frederick Blanck lent weight to his misgivings. The author was a student at the Friedrich-Wilhelms-Universität (today’s Humboldt-Universität) zu Berlin."
+			},
+			"relationship": {
+				"children": []
 			},
 			"curatorial": {
 				"classification": "documents",
@@ -242,15 +274,18 @@
 				]
 			}
 		},
-		"1904.1.1": {
-			"indices": {
-				"id": "1904.1.1",
-				"locationIdentifier": [102, 76, 0, 0, 0.27833437695679398872886662492172824045084533500313, 0.09326923076923076923076923076923076923076923076923],
-				"type": "exhibit"
+		{
+			"id": "1904.1.1",
+			"geometry": {
+				"position": [0.27833437695679398872886662492172824045084533500313, 0.251, -0.09326923076923076923076923076923076923076923076923]
 			},
+			"type": "exhibit",
 			"description": {
 				"name": "Gorilla",
 				"desc": "In 1904 the Leipzig-based pharmaceutical and dye merchant Erwin Olbrecht sold this gorilla hand to the Zoologisches Institut of the Königliche Friedrich-Wilhelms-Universität (since 1949 the Humboldt-Universität) zu Berlin."
+			},
+			"relationship": {
+				"children": []
 			},
 			"curatorial": {
 				"classification": "biological specimen",
@@ -264,15 +299,18 @@
 				]
 			}
 		},
-		"2018.1.1": {
-			"indices": {
-				"id": "2018.1.1",
-				"locationIdentifier": [102, 118, 0, 0, 0.15654351909830932999373825923606762680025046963056, 0.12644230769230769230769230769230769230769230769231],
-				"type": "exhibit"
+		{
+			"id": "2018.1.1",
+			"geometry": {
+				"position": [0.15654351909830932999373825923606762680025046963056, 0.251, -0.12644230769230769230769230769230769230769230769231]
 			},
+			"type": "exhibit",
 			"description": {
 				"name": "Orobates Pabsti",
 				"desc": "Orobates pabsti lived around 300 million years ago – long before the dinosaurs. Although it has only been possible to expose part of it from the rock, this fossil, which was found in the eastern German state of Thuringia in 1998, has been digitalized, converted into a life-sized model and animated, all as part of an interdisciplinary research project."
+			},
+			"relationship": {
+				"children": []
 			},
 			"curatorial": {
 				"classification": "model",
@@ -286,16 +324,18 @@
 				]
 			}
 		},
-		"2019.4.37": {
-			"indices": {
-				"id": "2019.4.37",
-				"locationIdentifier": [107, 1, 0, 0, 0.88259236067626800250469630557294927989981214777708, 0.50259236067626800250469630557294927989981214777708],
-				"type": "exhibit",
-				"classification": "installation"
+		{
+			"id": "2019.4.37",
+			"geometry": {
+				"position": [0.88259236067626800250469630557294927989981214777708, 0.251, -0.50259236067626800250469630557294927989981214777708]
 			},
+			"type": "exhibit",
 			"description": {
 				"name": "Vergnügen",
 				"desc": "Berlin is no Las Vegas or any other archetypal entertainment metropolis. But what role does entertainment play in a capital city that has over fifty theatres, countless bars and clubs which know no compulsory closing hours? And what was it like in the past, in the Wilhelmine era or in the 1920s? Where does entertainment actually begin, and where does it end?"
+			},
+			"relationship": {
+				"children": []
 			},
 			"curatorial": {
 				"themes": ["TechnoCulture"],
@@ -308,15 +348,18 @@
 				]
 			}
 		},
-		"1994.110.116": {
-			"indices": {
-				"id": "1994.110.116",
-				"locationIdentifier": [109, 1, 90, 24, 0.69223544145272385723231058234189104571070757670632, 0.82115384615384615384615384615384615384615384615385],
-				"type": "exhibit"
+		{
+			"id": "1994.110.116",
+			"geometry": {
+				"position": [0.69223544145272385723231058234189104571070757670632, 0.251, -0.82115384615384615384615384615384615384615384615385]
 			},
+			"type": "exhibit",
 			"description": {
 				"name": "Tresortür",
 				"desc": "This safe door used to secure the safe-deposit boxes in the basement of the Wertheim department store. Following the demolition of the war-damaged building located near the inner German border, the room behind the door remained unused for decades. After the fall of the Berlin Wall the building became the venue for the legendary techno club Tresor."
+			},
+			"relationship": {
+				"children": []
 			},
 			"curatorial": {
 				"classification": "artifact",
@@ -329,143 +372,175 @@
 					[170, 204, 161]
 				]
 			}
-		}
-	},
-	"places": {
-		"room.0": {
-			"indices": {
-				"id": "room.0",
-				"locationIdentifier": [0, 0, 0, 0, 0.2445209768, 0.4865384615],
-				"type": "place"
-			},
-			"description": {
-				"name": "Foyer",
-				"desc": "The main gateway to all exhibitions and facilities."
-			},
-			"relations": {
-				"navigationalHierarchy": 0,
-				"exhibits": []
-			}
 		},
-		"room.109": {
-			"indices": {
-				"id": "room.109",
-				"locationIdentifier": [109, 0, 0, 0, 0.7113337508, 0.9240384615],
-				"type": "place"
+        {
+            "id": "room.100",
+            "geometry": {
+                "position": [0, 0.25, 0],
+                "boxSize": [1, 0.25, 1]
+            },
+            "type": "space",
+
+            "description": {
+                "name": "1st Floor",
+                "desc": "1st Floor Hallway"
+            },
+            "relationship": {
+                "children": ["room.107", "room.109", "room.102"]
+            }
+        },
+		{
+			"id": "room.107",
+			"geometry": {
+				"position": [0.86286787726988102692548528490920475892298058860363, 0.25, -0.35144230769230769230769230769230769230769230769231],
+				"boxSize": [0.12930494677520350657482780212899185973700688791484, 0.25, 0.35144230769230769230769230769230769230769230769231]
 			},
+			"type": "space",
 			"description": {
 				"name": "Berlin Exhibition",
 				"desc": "Berlin exhibitions"
 			},
-			"relations": {
-				"navigationalHierarchy": 1,
-				"exhibits": ["1994.110.116"]
+			"relationship": {
+				"children": ["2019.4.37"]
 			}
 		},
-		"room.102": {
-			"indices": {
-				"id": "room.102",
-				"locationIdentifier": [102, 0, 0, 0, 0.0397620539, 0.2908653846],
-				"type": "place"
+		{
+			"id": "room.109",
+			"geometry": {
+				"position": [0.68659987476518472135253600500939261114589855979962, 0.25, -0.81682692307692307692307692307692307692307692307692],
+				"boxSize": [0.30463368816530995616781465247338760175328741390106, 0.25, 0.17980769230769230769230769230769230769230769230769]
 			},
+			"type": "space",
+			"description": {
+				"name": "Berlin Exhibition",
+				"desc": "Berlin exhibitions"
+			},
+			"relationship": {
+				"children": ["1994.110.116"]
+			}
+		},
+		{
+			"id": "room.102",
+			"geometry": {
+				"position": [0.0394489668127739511584220413274890419536631183469, 0.25, -0.0125],
+				"boxSize": [0.37226048841577958672510958046336881653099561678147, 0.25, 0.15480769230769230769230769230769230769230769230769]
+			},
+			"type": "space",
 			"description": {
 				"name": "Humboldt Lab",
 				"desc": "Humboldt Lab"
 			},
-			"relations": {
-				"navigationalHierarchy": 1,
-				"exhibits": ["1904.1.1", "2018.1.1", "1889.67.121"]
+			"relationship": {
+				"children": ["1904.1.1", "2018.1.1", "1889.67.121"]
 			}
 		},
-        "room.114": {
-            "indices": {
-                "id": "room.114",
-                "locationIdentifier": [102, 0, 0, 0, 0.0394489668, 0.8288461538],
-                "type": "place"
-            },
-            "description": {
-                "name": "Humboldt Forum Academy",
-                "desc": "Humboldt Forum Academy"
-            },
-            "relations": {
-                "navigationalHierarchy": 1,
-                "exhibits": []
-            }
-        },
-		"room.213": {
-			"indices": {
-				"id": "room.213",
-				"locationIdentifier": [213, 0, 0, 0, 0.0416405761, 0.1730769231],
-				"type": "place"
+		{
+			"id": "room.213",
+			"geometry": {
+				"position": [0.04164057608015028177833437695679398872886662492173, 0.5, -0.01586538461538461538461538461538461538461538461538],
+				"boxSize": [0.30776455854727614276768941765810895428929242329368, 0.25, 0.15336538461538461538461538461538461538461538461538]
 			},
+			"type": "space",
 			"description": {
 				"name": "Oceania",
 				"desc": "Ethnologisches Museum"
 			},
-			"relations": {
-				"navigationalHierarchy": 1,
-				"exhibits": ["2003.144.141"]
+			"relationship": {
+				"children": ["2003.144.141"]
 			}
 		},
-		"room.200": {
-			"indices": {
-				"id": "room.200",
-				"locationIdentifier": [200, 0, 0, 0, 0.3613024421, 0.5432692308],
-				"type": "place"
+		{
+			"id": "room.200",
+			"geometry": {
+				"position": [0, 0.5, 0],
+				"boxSize": [1, 0.25, 1]
 			},
+			"type": "space",
+
 			"description": {
 				"name": "2nd Floor",
 				"desc": "2nd Floor Hallway"
 			},
-			"relations": {
-				"navigationalHierarchy": 0,
-				"exhibits": ["1979.12.3"]
+			"relationship": {
+				"children": ["1979.12.3", "room.206", "room.213"]
 			}
 		},
-		"room.206": {
-			"indices": {
-				"id": "room.206",
-				"locationIdentifier": [206, 0, 0, 0, 0.868816531, 0.4355769231],
-				"type": "place"
+		{
+			"id": "room.206",
+			"geometry": {
+				"position": [0.84290544771446462116468378209142141515341264871634, 0.5, -0.19711538461538461538461538461538461538461538461538],
+				"boxSize": [0.11145898559799624295554164057608015028177833437696, 0.25, 0.6125]
 			},
+			"type": "space",
 			"description": {
 				"name": "America",
 				"desc": "Ethnologisches Museum"
 			},
-			"relations": {
-				"navigationalHierarchy": 1,
-				"exhibits": ["2016.15.1440", "1891.12.1", "1961.1.2", "1961.1.4", "1975.3.16"]
+			"relationship": {
+				"children": ["2016.15.1440", "1891.12.1", "1961.1.2", "1961.1.4", "1975.3.16"]
 			}
 		},
-		"room.300": {
-			"indices": {
-				"id": "room.300",
-				"locationIdentifier": [300, 0, 0, 0, 0.3534752661, 0.4846153846],
-				"type": "place"
+        {
+			"id": "room.300",
+			"geometry": {
+				"position": [0, 0.75, 0],
+				"boxSize": [1, 0.25, 1]
 			},
+			"type": "space",
+
 			"description": {
 				"name": "3rd Floor",
 				"desc": "3rd Floor Hallway"
 			},
-			"relations": {
-				"navigationalHierarchy": 0,
-				"exhibits": ["1961.1.1"]
+			"relationship": {
+				"children": ["1961.1.1", "room.313"]
 			}
 		},
-		"room.313": {
-			"indices": {
-				"id": "room.313",
-				"locationIdentifier": [313, 0, 0, 0, 0.114589856, 0.6855769231],
-				"type": "place"
+		{
+			"id": "room.313",
+			"geometry": {
+				"position": [0.04195366311834690043832185347526612398246712586099, 0.75, -0.67355769230769230769230769230769230769230769230769],
+				"boxSize": [0.11145898559799624295554164057608015028177833437696, 0.25, 0.29086538461538461538461538461538461538461538461538]
 			},
+			"type": "space",
 			"description": {
 				"name": "Museum for Asian Arts",
 				"desc": "Museum for Asian Arts"
 			},
-			"relations": {
-				"navigationalHierarchy": 1,
-				"exhibits": ["1997.1.127", "1994.245.135"]
+			"relationship": {
+				"children": ["1997.1.127", "1994.245.135"]
+			}
+		},
+        {
+            "id": "room.0",
+            "geometry": {
+                "position": [0, 0, 0],
+                "boxSize": [1, 0.25, 1]
+            },
+            "type": "space",
+
+            "description": {
+                "name": "Ground Floor",
+                "desc": "Ground Floor Hallway"
+            },
+            "relationship": {
+                "children": []
+            }
+        },
+		{
+			"id": "root",
+			"geometry": {
+                "position": [0, 0, 0],
+                "boxSize": [1, 1, 1]
+			},
+			"type": "space",
+			"description": {
+				"name": "Humboldt Forum",
+				"desc": "Humboldt Forum"
+			},
+			"relationship": {
+				"children": ["room.300", "room.200", "room.0", "room.100"]
 			}
 		}
-	}
+	]
 }
