@@ -7,11 +7,11 @@ public class OverlappingDetection : MonoBehaviour
     internal int overlappingCount;
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == 10) overlappingCount++;
+        if (other.gameObject.layer == gameObject.layer) overlappingCount++;
     }
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.layer == 10) overlappingCount--;
+        if (other.gameObject.layer == gameObject.layer) overlappingCount--;
     }
     private void OnDisable()
     {
