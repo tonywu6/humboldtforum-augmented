@@ -13,6 +13,7 @@ public class MuseumObjectController : MonoBehaviour
     private GameObject indicatorAnchor;
     private GameObject indicatorPin;
     private GameObject indicatorArrow;
+    private GameObject indicatorSelection;
     private int indicatorNeighborCount;
 
     private GameObject sign;
@@ -22,6 +23,7 @@ public class MuseumObjectController : MonoBehaviour
     internal Color textColor;
 
     internal bool included = true;
+    internal bool aimedAt = false;
 
     internal MuseumObjectMetadata metadata;
 
@@ -38,6 +40,7 @@ public class MuseumObjectController : MonoBehaviour
         indicatorAnchor = indicator.transform.Find("ScreenAnchor").gameObject;
         indicatorPin = indicator.transform.Find("Pin").gameObject;
         indicatorArrow = indicator.transform.Find("Pin/Arrow").gameObject;
+        indicatorSelection = indicator.transform.Find("Pin/Selection").gameObject;
 
         sign = indicator.transform.Find("Sign").gameObject;
         signPlate = sign.transform.Find("Plate").gameObject;
@@ -64,11 +67,17 @@ public class MuseumObjectController : MonoBehaviour
         {
             indicator.transform.localPosition = Vector3.zero;
             indicatorArrow.SetActive(true);
+
+            indicatorPin.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f) * Vector3.Distance(indicatorPin.transform.position, Camera.main.transform.position) / 10;
+            sign.transform.localScale = new Vector3(6, 6, 1) * Vector3.Distance(indicatorPin.transform.position, Camera.main.transform.position) / 10;
         }
         else if (Physics.Raycast(Camera.main.transform.position, (transform.position - Camera.main.transform.position).normalized, out RaycastHit hitInfo, Mathf.Infinity, 1 << 12))
         {
             indicator.transform.position = hitInfo.point;
             indicatorArrow.SetActive(false);
+
+            indicatorPin.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
+            sign.transform.localScale = new Vector3(6, 6, 1);
 
             Debug.DrawLine(Camera.main.transform.position, hitInfo.point, new Color(1, 0, 0, 1));
             Debug.DrawLine(indicatorAnchor.transform.position, indicatorPin.transform.position, new Color(1, 1, 0, 1));
@@ -84,15 +93,18 @@ public class MuseumObjectController : MonoBehaviour
         sign.transform.rotation = LeveledCameraRotation();
         sign.transform.position = indicatorPin.transform.position;
         signPlate.transform.localScale = new Vector3(TextOf(sign).GetRenderedValues().x / 85, TextOf(sign).GetRenderedValues().y / 95, 0.02f);
+        indicatorSelection.transform.localPosition = new Vector3(0, 0, -3);
 
         indicatorNeighborCount = signPlate.GetComponent<OverlappingDetection>().overlappingCount;
-        if (indicatorNeighborCount == 0)
+        if (aimedAt)
+        {
+            ToggleSign();
+        } else if (indicatorNeighborCount == 0)
         {
             StartCoroutine(ShowSignOnStabilize());
         } else
         {
-            foreach (Renderer r in sign.GetComponentsInChildren<Renderer>()) { r.enabled = false; }
-            indicatorPin.GetComponent<Renderer>().enabled = true;
+            ToggleSign(false);
         }
 
         MakeVisible(true);
@@ -124,14 +136,24 @@ public class MuseumObjectController : MonoBehaviour
     {
         for (int i = 0; i < 60; i++) 
         {
+            if (aimedAt)
+            {
+                ToggleSign();
+                yield break;
+            }
             if (indicatorNeighborCount > 0)
             {
+                ToggleSign(false);
                 yield break;
             }
             yield return null;
         }
-        foreach (Renderer r in sign.GetComponentsInChildren<Renderer>()) { r.enabled = true; }
-        indicatorPin.GetComponent<Renderer>().enabled = false;
+        ToggleSign();
+    }
+    internal void ToggleSign(bool visible = true)
+    {
+        foreach (Renderer r in sign.GetComponentsInChildren<Renderer>()) { r.enabled = visible; }
+        indicatorPin.GetComponent<Renderer>().enabled = !visible;
     }
 
 }

@@ -15,12 +15,12 @@ TagManager:
   - 
   - PostProcessing
   - 
-  - MuseumObject
-  - 
+  - OverlappingRepulsion
+  - OverlappingDetection
   - AugmentationBase
   - 
   - 
-  - 
+  - MuseumObject
   - 
   - 
   - 

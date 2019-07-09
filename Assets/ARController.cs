@@ -12,6 +12,9 @@ public class ARController : MonoBehaviour
     public GameObject museumEnvironment;
     public GameObject screens;
 
+    public GameObject desc;
+    public GameObject back;
+
     private GameObject augmentationPlane;
 
     // Start is called before the first frame update
@@ -62,6 +65,31 @@ public class ARController : MonoBehaviour
         //augmentationPlane.transform.LookAt(Camera.main.transform.position);
         augmentationPlane.transform.position = Camera.main.transform.position + Camera.main.transform.forward * 10;
         augmentationPlane.transform.rotation = Camera.main.transform.rotation;
+        foreach (Collider c in Physics.OverlapCapsule(Camera.main.transform.position, Camera.main.transform.position + Camera.main.transform.forward * 20, 0.1f, 1 << 15))
+        {
+            screens.transform.Find("Controls/Topic/Text").gameObject.GetComponent<TextMeshProUGUI>().text = "-";
+            if (c.gameObject.name != "Selection") { continue; }
+
+            foreach (MuseumObjectMetadata MO in CommandCenter.museumExhibits.Values)
+            {
+                MO.GO.GetComponent<MuseumObjectController>().aimedAt = false;
+            }
+            c.gameObject.GetComponentInParent<MuseumObjectController>().aimedAt = true;
+            screens.transform.Find("Controls/Topic/Text").gameObject.GetComponent<TextMeshProUGUI>().text = c.gameObject.GetComponentInParent<MuseumObjectController>().metadata.name;
+            return;
+        }
+        if (Input.touchCount > 0)
+        {
+            Touch touch = Input.GetTouch(0);
+            Physics.Raycast(Camera.main.ScreenPointToRay(touch.position), out RaycastHit hit);
+            if (hit.collider.gameObject.GetComponentInParent<MuseumObjectController>())
+            {
+                MuseumObjectController MOC = hit.collider.gameObject.GetComponentInParent<MuseumObjectController>();
+                desc.SetActive(true);
+                desc.transform.Find("Text").GetComponent<TextMeshProUGUI>().text = MOC.metadata.desc;
+                back.SetActive(true);
+            }
+        }
     }
 
     public void ResetCamera()
@@ -84,6 +112,11 @@ public class ARController : MonoBehaviour
         yield return new WaitForSeconds(3);
         screens.transform.Find("Controls/Alert").gameObject.SetActive(false);
         museumEnvironment.SetActive(true);
+    }
+    public void hide()
+    {
+        desc.SetActive(false);
+        back.SetActive(false);
     }
 
 }
