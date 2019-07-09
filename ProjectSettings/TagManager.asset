@@ -17,7 +17,7 @@ TagManager:
   - 
   - MuseumObject
   - 
-  - LinecastDetection
+  - AugmentationBase
   - 
   - 
   - 

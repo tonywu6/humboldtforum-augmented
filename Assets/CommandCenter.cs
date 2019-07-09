@@ -32,7 +32,10 @@ public class CommandCenter : MonoBehaviour
     void Start()
     {
         LoadMuseumCollection();
-        UnloadAllScenesExcept("Controller");
+        //UnloadAllScenesExcept("Controller");
+        ARMapPreview();
+
+        Physics.IgnoreLayerCollision(10, 12);
     }
     private void LoadMuseumCollection()
     {
@@ -65,8 +68,7 @@ public class CommandCenter : MonoBehaviour
     }
     private void UnloadAllScenesExcept(string sceneName)
     {
-        int c = SceneManager.sceneCount;
-        for (int i = 0; i < c; i++)
+        for (int i = 0; i < SceneManager.sceneCount; i++)
         {
             Scene scene = SceneManager.GetSceneAt(i);
             if (scene.name != sceneName && scene.name != "UnityARKitRemote")

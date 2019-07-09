@@ -23,7 +23,7 @@ public class ARController : MonoBehaviour
         InstantiateMO(CommandCenter.museumExhibits.Values.ToList(), museumEnvironment.transform);
         OrganizeMuseumSpaces(CommandCenter.museumSpaces.Values.ToList(), museumEnvironment.transform);
 
-        var frustumHeight = 2.0f * 30 * Mathf.Tan(Camera.main.fieldOfView * 0.5f * Mathf.Deg2Rad);
+        var frustumHeight = 2.0f * 10 * Mathf.Tan(Camera.main.fieldOfView * 0.5f * Mathf.Deg2Rad) + 1f;
         var frustumWidth = frustumHeight * Camera.main.aspect;
         augmentationPlane = GameObject.CreatePrimitive(PrimitiveType.Quad);
         augmentationPlane.name = "AugmentationPlane";
@@ -32,6 +32,7 @@ public class ARController : MonoBehaviour
         augmentationPlane.layer = 12;
         augmentationPlane.GetComponent<MeshCollider>().convex = true;
         augmentationPlane.GetComponent<Renderer>().enabled = false;
+        //augmentationPlane.AddComponent<ReverseNormals>();
 
         StartCoroutine(DemonstrationInitialScreen());
     }
@@ -59,7 +60,7 @@ public class ARController : MonoBehaviour
     void Update()
     {
         //augmentationPlane.transform.LookAt(Camera.main.transform.position);
-        augmentationPlane.transform.position = Camera.main.transform.position + Camera.main.transform.forward * 30;
+        augmentationPlane.transform.position = Camera.main.transform.position + Camera.main.transform.forward * 10;
         augmentationPlane.transform.rotation = Camera.main.transform.rotation;
     }
 
