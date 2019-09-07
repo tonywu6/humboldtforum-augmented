@@ -30,7 +30,7 @@ public class GenerateImageAnchor : MonoBehaviour {
 			Quaternion rotation = UnityARMatrixOps.GetRotation (arImageAnchor.transform);
 
 			imageAnchorGO = Instantiate<GameObject> (prefabToGenerate, position, rotation);
-            imageAnchorGO.name = "FriedrichIII";
+            imageAnchorGO.name = prefabToGenerate.name + referenceImage.imageName;
             imageAnchorGO.transform.parent = transform.parent;
 		}
 	}
