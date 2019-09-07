@@ -13,7 +13,7 @@
 				"children": []
 			},
 			"curatorial": {
-				"classification": "sculpture",
+				"classification": ["sculpture"],
 				"themes": ["CreaturesInCulture"],
 				"exhibitions": ["HFHighlights"],
 				"keywords": [],
@@ -38,7 +38,7 @@
 				"children": []
 			},
 			"curatorial": {
-				"classification": "sculpture",
+				"classification": ["sculpture"],
 				"themes": ["Power"],
 				"exhibitions": ["HFHighlights"],
 				"keywords": [],
@@ -63,7 +63,7 @@
 				"children": []
 			},
 			"curatorial": {
-				"classification": "sculpture",
+				"classification": ["sculpture"],
 				"themes": ["Power"],
 				"exhibitions": ["HFHighlights"],
 				"keywords": [],
@@ -88,7 +88,7 @@
 				"children": []
 			},
 			"curatorial": {
-				"classification": "sculpture",
+				"classification": ["sculpture"],
 				"themes": [],
 				"exhibitions": ["HFHighlights"],
 				"keywords": [],
@@ -113,7 +113,7 @@
 				"children": []
 			},
 			"curatorial": {
-				"classification": "painting",
+				"classification": ["painting"],
 				"themes": [],
 				"exhibitions": ["HFHighlights"],
 				"keywords": [],
@@ -138,7 +138,7 @@
 				"children": []
 			},
 			"curatorial": {
-				"classification": "picture, featherwork",
+				"classification": ["picture", "featherwork"],
 				"themes": ["CreaturesInCulture", "Power"],
 				"exhibitions": ["HFHighlights"],
 				"keywords": [],
@@ -163,7 +163,7 @@
 				"children": []
 			},
 			"curatorial": {
-				"classification": "painting",
+				"classification": ["painting"],
 				"themes": ["Power"],
 				"exhibitions": ["HFHighlights"],
 				"keywords": [],
@@ -188,7 +188,7 @@
 				"children": []
 			},
 			"curatorial": {
-				"classification": "sculpture",
+				"classification": ["sculpture"],
 				"themes": ["CreaturesInCulture", "Power"],
 				"exhibitions": ["HFHighlights"],
 				"keywords": [],
@@ -213,7 +213,7 @@
 				"children": []
 			},
 			"curatorial": {
-				"classification": "sculpture",
+				"classification": ["sculpture"],
 				"themes": [],
 				"exhibitions": ["HFHighlights"],
 				"keywords": [],
@@ -238,7 +238,7 @@
 				"children": []
 			},
 			"curatorial": {
-				"classification": "statue",
+				"classification": ["statue"],
 				"themes": ["Power"],
 				"exhibitions": ["HFHighlights"],
 				"keywords": [],
@@ -263,7 +263,7 @@
 				"children": []
 			},
 			"curatorial": {
-				"classification": "documents",
+				"classification": ["documents"],
 				"themes": ["SpiritOfOpposition"],
 				"exhibitions": ["HFHighlights"],
 				"keywords": [],
@@ -288,7 +288,7 @@
 				"children": []
 			},
 			"curatorial": {
-				"classification": "biological specimen",
+				"classification": ["biological specimen"],
 				"themes": ["CreaturesInCulture"],
 				"exhibitions": ["HFHighlights"],
 				"keywords": [],
@@ -313,7 +313,7 @@
 				"children": []
 			},
 			"curatorial": {
-				"classification": "model",
+				"classification": ["model"],
 				"themes": [],
 				"exhibitions": ["HFHighlights"],
 				"keywords": [],
@@ -338,6 +338,7 @@
 				"children": []
 			},
 			"curatorial": {
+				"classification": ["model"],
 				"themes": ["TechnoCulture"],
 				"exhibitions": ["HFHighlights"],
 				"keywords": [],
@@ -362,7 +363,7 @@
 				"children": []
 			},
 			"curatorial": {
-				"classification": "artifact",
+				"classification": ["artifact"],
 				"themes": ["TechnoCulture"],
 				"exhibitions": ["HFHighlights"],
 				"keywords": [],
@@ -441,7 +442,7 @@
 			},
 			"type": "place",
 			"description": {
-				"name": "Oceania",
+				"name": "Oceania (Eth. Museum)",
 				"desc": "Ethnologisches Museum"
 			},
 			"relationship": {
@@ -471,7 +472,7 @@
 			},
 			"type": "place",
 			"description": {
-				"name": "America",
+				"name": "America (Eth. Museum)",
 				"desc": "Ethnologisches Museum"
 			},
 			"relationship": {
