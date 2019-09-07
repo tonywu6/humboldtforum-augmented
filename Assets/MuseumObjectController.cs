@@ -22,8 +22,7 @@ public class MuseumObjectController : MonoBehaviour
     internal Color accentColor;
     internal Color textColor;
 
-    internal bool included = true;
-    internal bool aimedAt = false;
+    internal bool aimedAt;
 
     internal MuseumObjectRep metadata;
 
@@ -61,7 +60,11 @@ public class MuseumObjectController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!included) return;
+        if (!metadata.included)
+        {
+            MakeVisible(false);
+            return;
+        }
 
         if ((transform.position - Camera.main.transform.position).sqrMagnitude < 144)
         {

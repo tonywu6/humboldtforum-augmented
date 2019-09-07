@@ -10,6 +10,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -23,10 +24,11 @@ public class CommandCenter : MonoBehaviour
     private GameObject museumWorld;
     public Camera placeholderCam;
 
-    public static Dictionary<string, MuseumObjectRep> museumExhibits = new Dictionary<string, MuseumObjectRep>();
-    public static Dictionary<string, MuseumObjectRep> museumSpaces = new Dictionary<string, MuseumObjectRep>();
+    public static Dictionary<string, MuseumObjectRep> museumObjects = new Dictionary<string, MuseumObjectRep>();
+    public static Dictionary<string, List<MuseumObjectRep>> museumThreads = new Dictionary<string, List<MuseumObjectRep>>();
 
     public static List<string> currentZones = new List<string>();
+    public static string currentLocation = "";
 
     public static Vector3 museumDimension = new Vector3(183.811f, 40f, 121.7801f);
 
@@ -47,17 +49,39 @@ public class CommandCenter : MonoBehaviour
 
         foreach (JSONNode item in museumCollectionJSON["objects"])
         {
-            switch ((string)item["type"])
+            museumObjects.Add(item["id"], new MuseumObjectRep(item));
+        }
+
+        museumThreads["Museum Navigation"] = new List<MuseumObjectRep>();
+        foreach (MuseumObjectRep m in museumObjects.Values.Where(m => m.type == "place"))
+        {
+            museumThreads["Museum Navigation"].Add(m);
+        }
+
+        foreach (MuseumObjectRep m in museumObjects.Values.Where(m => m.type == "exhibit"))
+        {
+            if (m.curatorial != null)
             {
-                case "exhibit":
-                    museumExhibits.Add(item["id"], new MuseumObjectRep(item));
-                    break;
-                case "space":
-                    museumSpaces.Add(item["id"], new MuseumObjectRep(item));
-                    break;
-                default:
-                    print("What");
-                    break;
+                foreach (string theme in m.curatorial["themes"].AsArray.Values)
+                {
+                    if (!museumThreads.ContainsKey(theme)) museumThreads[theme] = new List<MuseumObjectRep>();
+                    museumThreads[theme].Add(m);
+                }
+                foreach (string theme in m.curatorial["exhibitions"].AsArray.Values)
+                {
+                    if (!museumThreads.ContainsKey(theme)) museumThreads[theme] = new List<MuseumObjectRep>();
+                    museumThreads[theme].Add(m);
+                }
+                foreach (string theme in m.curatorial["keywords"].AsArray.Values)
+                {
+                    if (!museumThreads.ContainsKey(theme)) museumThreads[theme] = new List<MuseumObjectRep>();
+                    museumThreads[theme].Add(m);
+                }
+                foreach (string theme in m.curatorial["classification"].AsArray.Values)
+                {
+                    if (!museumThreads.ContainsKey(theme)) museumThreads[theme] = new List<MuseumObjectRep>();
+                    museumThreads[theme].Add(m);
+                }
             }
         }
     }
@@ -90,20 +114,38 @@ public class CommandCenter : MonoBehaviour
     {
         UnloadAllScenesExcept("Controller");
         placeholderCam.enabled = true;
+        ARMapPreview();
     }
 
     // Update is called once per frame
     void Update()
     {
         currentZones = new List<string>();
-        foreach (MuseumObjectRep m in museumSpaces.Values)
+        foreach (MuseumObjectRep m in museumObjects.Values.Where(m => m.type == "space" || m.type == "place"))
         {
-            if (m.GO && m.GO.GetComponent<Positioning>().cameraIn && m.id != "root") currentZones.Add(m.id);
+            if (m.GO && m.id != "root")
+            {
+                if (m.GO.GetComponent<Positioning>().cameraIn)
+                {
+                    currentZones.Add(m.id);
+                } else
+                {
+                    currentZones.Remove(m.id);
+                }
+            }
+        }
+        if (!currentZones.Contains(currentLocation)) currentLocation = "";
+        foreach (string zoneId in currentZones)
+        {
+            if (string.Compare(zoneId, currentLocation) > 0)
+            {
+                currentLocation = zoneId;
+            }
         }
     }
 
     // Helpers
-    public static Vector3 DenormalizedMuseumVectors(Vector3 pos, bool moveAnchor = false)
+    internal static Vector3 DenormalizedMuseumVectors(Vector3 pos, bool moveAnchor = false)
     {
         return moveAnchor ? Vector3.Scale(pos - new Vector3(.5f, .5f, -.5f), museumDimension) : Vector3.Scale(pos, museumDimension);
     }

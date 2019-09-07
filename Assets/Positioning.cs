@@ -20,7 +20,7 @@ public class Positioning : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        cameraIn = other.gameObject.layer == 14;
+        cameraIn |= other.gameObject.layer == 14;
     }
 
     private void OnTriggerExit(Collider other)

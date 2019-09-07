@@ -15,6 +15,8 @@ public class MuseumObjectRep
     public JSONObject curatorial;
     public JSONObject relationship;
 
+    internal bool included = true;
+
     public MuseumObjectRep(JSONNode metadataJSON)
     {
         id = metadataJSON["id"];
@@ -49,6 +51,24 @@ public class MuseumObjectRep
 
                 GO.AddComponent<Positioning>();
                 break;
+            case "place":
+                controller = GO.AddComponent<MuseumObjectController>();
+                controller.metadata = this;
+
+                boxSizeArray = geometry["boxSize"].AsArray;
+
+                collider = GO.AddComponent<BoxCollider>();
+                collider.size = CommandCenter.DenormalizedMuseumVectors(new Vector3(boxSizeArray[0], boxSizeArray[1], boxSizeArray[2]));
+                collider.center = Vector3.Scale(collider.size, new Vector3(.5f, .5f, -.5f));
+                collider.isTrigger = true;
+
+                GO.AddComponent<Positioning>();
+                break;
         }
+    }
+
+    internal void ToggleVisible(bool visible = true)
+    {
+        included = visible;
     }
 }
