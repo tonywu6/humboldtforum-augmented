@@ -11,10 +11,8 @@ public class ARController : MonoBehaviour
 
     public GameObject museumEnvironment;
     public GameObject screens;
-
-    public GameObject desc;
-    public GameObject back;
-
+    public GameObject defaultCamLocation;
+    
     private GameObject augmentationPlane;
 
     // Start is called before the first frame update
@@ -30,7 +28,7 @@ public class ARController : MonoBehaviour
         var frustumWidth = frustumHeight * Camera.main.aspect;
         augmentationPlane = GameObject.CreatePrimitive(PrimitiveType.Quad);
         augmentationPlane.name = "AugmentationPlane";
-        augmentationPlane.transform.localScale = new Vector3(frustumWidth, frustumHeight, 1);
+        augmentationPlane.transform.localScale = new Vector3(frustumWidth * 1.1f, frustumHeight * 1.1f, 1);
         augmentationPlane.transform.SetParent(museumEnvironment.transform);
         augmentationPlane.layer = 12;
         augmentationPlane.GetComponent<MeshCollider>().convex = true;
@@ -40,13 +38,13 @@ public class ARController : MonoBehaviour
         StartCoroutine(DemonstrationInitialScreen());
     }
 
-    private void InstantiateMO(List<MuseumObjectMetadata> mObjs, Transform parent)
+    private void InstantiateMO(List<MuseumObjectRep> mObjs, Transform parent)
     {
-       foreach (MuseumObjectMetadata mObj in mObjs) if (!mObj.GO) { mObj.InstantiateGO(parent); }
+       foreach (MuseumObjectRep mObj in mObjs) if (!mObj.GO) { mObj.InstantiateGO(parent); }
     }
-    private void OrganizeMuseumSpaces(List<MuseumObjectMetadata> mObjs, Transform parent)
+    private void OrganizeMuseumSpaces(List<MuseumObjectRep> mObjs, Transform parent)
     {
-        foreach (MuseumObjectMetadata mObj in mObjs)
+        foreach (MuseumObjectRep mObj in mObjs)
         {
             foreach (string child in mObj.relationship["children"].AsArray.Values)
             {
@@ -70,12 +68,12 @@ public class ARController : MonoBehaviour
             screens.transform.Find("Controls/Topic/Text").gameObject.GetComponent<TextMeshProUGUI>().text = "-";
             if (c.gameObject.name != "Selection") { continue; }
 
-            foreach (MuseumObjectMetadata MO in CommandCenter.museumExhibits.Values)
+            foreach (MuseumObjectRep MO in CommandCenter.museumExhibits.Values)
             {
                 MO.GO.GetComponent<MuseumObjectController>().aimedAt = false;
             }
             c.gameObject.GetComponentInParent<MuseumObjectController>().aimedAt = true;
-            screens.transform.Find("Controls/Topic/Text").gameObject.GetComponent<TextMeshProUGUI>().text = c.gameObject.GetComponentInParent<MuseumObjectController>().metadata.name;
+            UpdateScreenText("Topic/Text", c.gameObject.GetComponentInParent<MuseumObjectController>().metadata.name);
             return;
         }
         if (Input.touchCount > 0)
@@ -85,38 +83,107 @@ public class ARController : MonoBehaviour
             if (hit.collider.gameObject.GetComponentInParent<MuseumObjectController>())
             {
                 MuseumObjectController MOC = hit.collider.gameObject.GetComponentInParent<MuseumObjectController>();
-                desc.SetActive(true);
-                desc.transform.Find("Text").GetComponent<TextMeshProUGUI>().text = MOC.metadata.desc;
-                back.SetActive(true);
+                ToggleScreenElementVisible("Desc");
+                UpdateScreenText("Desc/Text", MOC.metadata.desc);
+            }
+        }
+
+        if (CommandCenter.museumSpaces.Count > 0)
+        {
+            string currentLocationId = "";
+            foreach (string zoneId in CommandCenter.currentZones)
+            {
+                if (string.Compare(zoneId, currentLocationId) > 0)
+                {
+                    currentLocationId = zoneId;
+                }
+            }
+            if (currentLocationId != "")
+            {
+                UpdateScreenText("Status/Text", CommandCenter.museumSpaces[currentLocationId].desc);
+            } else
+            {
+                UpdateScreenText("Status/Text", "Outside museum!");
             }
         }
     }
 
-    public void ResetCamera()
+    public void RelocateCamera(Transform t)
     {
-        cameraParent.transform.position = CommandCenter.DenormalizedMuseumVectors(Vector3.zero, true) - cameraParent.transform.Find("Main Camera").localPosition;
+        cameraParent.transform.position = CommandCenter.DenormalizedMuseumVectors(t.position, true) - Camera.main.transform.localPosition;
+    }
+    public void RelocateCamera(Vector3 v, bool normalized = false)
+    {
+        cameraParent.transform.position = (normalized ? CommandCenter.DenormalizedMuseumVectors(v, true) : v) - Camera.main.transform.localPosition;
+    }
+    public void MoveCamera(string direction)
+    {
+        Vector3 newPosition = cameraParent.transform.position;
+        Vector3 oldPosition = cameraParent.transform.position;
+
+        switch(direction)
+        {
+            case "W":
+                newPosition += Camera.main.transform.forward * 3;
+                break;
+            case "A":
+                newPosition += Camera.main.transform.right * -3;
+                break;
+            case "S":
+                newPosition += Camera.main.transform.forward * -3;
+                break;
+            case "D":
+                newPosition += Camera.main.transform.right * 3;
+                break;
+            case "E":
+                newPosition += CommandCenter.DenormalizedMuseumVectors(new Vector3(0f, 0.25f, 0f), false);
+                break;
+            case "C":
+                newPosition += CommandCenter.DenormalizedMuseumVectors(new Vector3(0f, -0.25f, 0f), false);
+                break;
+        }
+
+        StartCoroutine(InterpolateCamera(oldPosition, newPosition, 60));
+    }
+    private IEnumerator InterpolateCamera(Vector3 start, Vector3 end, int frames)
+    {
+        for (int i = 1; i <= frames; i++)
+        {
+            RelocateCamera(Vector3.Lerp(start, end, i / (float)frames));
+            yield return null;
+        }
     }
 
+    private void UpdateScreenText(string path, string text)
+    {
+        screens.transform.Find(path).gameObject.GetComponent<TextMeshProUGUI>().text = text;
+    }
+    private void ToggleScreenElementVisible(string path, bool visible = true)
+    {
+        screens.transform.Find(path).gameObject.SetActive(visible);
+    }
     private IEnumerator DemonstrationInitialScreen()
     {
-        screens.transform.Find("Controls/Status/Text").gameObject.GetComponent<TextMeshProUGUI>().text = "Acquiring location...";
-        screens.transform.Find("Controls/Topic").gameObject.SetActive(false);
-        screens.transform.Find("Controls/Alert/Text").gameObject.GetComponent<TextMeshProUGUI>().text = "Please slowly move your phone around...";
-        screens.transform.Find("Controls/Controls").gameObject.SetActive(false);
+        UpdateScreenText("Status/Text", "Acquiring location...");
+        ToggleScreenElementVisible("Topic", false);
+        UpdateScreenText("Alert/Text", "Please slowly move your phone around...");
+        ToggleScreenElementVisible("Controls/Options", false);
+        RelocateCamera(defaultCamLocation.transform.position);
+
         yield return new WaitForSeconds(5);
-        screens.transform.Find("Controls/Status/Text").gameObject.GetComponent<TextMeshProUGUI>().text = "First floor, Foyer";
-        screens.transform.Find("Controls/Topic").gameObject.SetActive(true);
-        //canvas.transform.Find("Controls/Alert").gameObject.SetActive(false);
-        screens.transform.Find("Controls/Controls").gameObject.SetActive(true);
-        screens.transform.Find("Controls/Alert/Text").gameObject.GetComponent<TextMeshProUGUI>().text = "Please scan around with your phone";
-        yield return new WaitForSeconds(3);
-        screens.transform.Find("Controls/Alert").gameObject.SetActive(false);
+
         museumEnvironment.SetActive(true);
+        ToggleScreenElementVisible("Topic");
+        ToggleScreenElementVisible("Controls/Options");
+        UpdateScreenText("Alert/Text", "Location acquired");
+        yield return new WaitForSeconds(3);
+
+        ToggleScreenElementVisible("Alert", false);
+
     }
-    public void hide()
+    public void ShowMovementControl(bool visible)
     {
-        desc.SetActive(false);
-        back.SetActive(false);
+        ToggleScreenElementVisible("Controls/Simulation", visible);
     }
 
 }

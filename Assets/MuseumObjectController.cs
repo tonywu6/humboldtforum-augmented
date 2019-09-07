@@ -25,7 +25,7 @@ public class MuseumObjectController : MonoBehaviour
     internal bool included = true;
     internal bool aimedAt = false;
 
-    internal MuseumObjectMetadata metadata;
+    internal MuseumObjectRep metadata;
 
     // Start is called before the first frame update
     void Start()
@@ -68,6 +68,10 @@ public class MuseumObjectController : MonoBehaviour
             indicator.transform.localPosition = Vector3.zero;
             indicatorArrow.SetActive(true);
 
+            sign.transform.position = indicatorPin.transform.position;
+
+            signPlate.GetComponent<SpringJoint>().damper = Mathf.Infinity;
+            
             indicatorPin.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f) * Vector3.Distance(indicatorPin.transform.position, Camera.main.transform.position) / 10;
             sign.transform.localScale = new Vector3(6, 6, 1) * Vector3.Distance(indicatorPin.transform.position, Camera.main.transform.position) / 10;
         }
@@ -78,6 +82,8 @@ public class MuseumObjectController : MonoBehaviour
 
             indicatorPin.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
             sign.transform.localScale = new Vector3(6, 6, 1);
+
+            signPlate.GetComponent<SpringJoint>().damper = 1;
 
             Debug.DrawLine(Camera.main.transform.position, hitInfo.point, new Color(1, 0, 0, 1));
             Debug.DrawLine(indicatorAnchor.transform.position, indicatorPin.transform.position, new Color(1, 1, 0, 1));
@@ -91,21 +97,20 @@ public class MuseumObjectController : MonoBehaviour
 
         indicatorPin.transform.rotation = LeveledCameraRotation();
         sign.transform.rotation = LeveledCameraRotation();
-        sign.transform.position = indicatorPin.transform.position;
         signPlate.transform.localScale = new Vector3(TextOf(sign).GetRenderedValues().x / 85, TextOf(sign).GetRenderedValues().y / 95, 0.02f);
         indicatorSelection.transform.localPosition = new Vector3(0, 0, -3);
 
-        indicatorNeighborCount = signPlate.GetComponent<OverlappingDetection>().overlappingCount;
-        if (aimedAt)
-        {
-            ToggleSign();
-        } else if (indicatorNeighborCount == 0)
-        {
-            StartCoroutine(ShowSignOnStabilize());
-        } else
-        {
-            ToggleSign(false);
-        }
+        //indicatorNeighborCount = signPlate.GetComponent<OverlappingDetection>().overlappingCount;
+        //if (aimedAt)
+        //{
+        //    ToggleSign();
+        //} else if (indicatorNeighborCount == 0)
+        //{
+        //    StartCoroutine(ShowSignOnStabilize());
+        //} else
+        //{
+        //    ToggleSign(false);
+        //}
 
         MakeVisible(true);
 

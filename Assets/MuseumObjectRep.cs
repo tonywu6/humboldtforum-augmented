@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using SimpleJSON;
 
-public class MuseumObjectMetadata
+public class MuseumObjectRep
 {
     public string id;
     public string name;
@@ -15,7 +15,7 @@ public class MuseumObjectMetadata
     public JSONObject curatorial;
     public JSONObject relationship;
 
-    public MuseumObjectMetadata(JSONNode metadataJSON)
+    public MuseumObjectRep(JSONNode metadataJSON)
     {
         id = metadataJSON["id"];
         type = metadataJSON["type"];
@@ -46,6 +46,8 @@ public class MuseumObjectMetadata
                 collider.size = CommandCenter.DenormalizedMuseumVectors(new Vector3(boxSizeArray[0], boxSizeArray[1], boxSizeArray[2]));
                 collider.center = Vector3.Scale(collider.size, new Vector3(.5f, .5f, -.5f));
                 collider.isTrigger = true;
+
+                GO.AddComponent<Positioning>();
                 break;
         }
     }
