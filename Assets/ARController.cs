@@ -15,14 +15,15 @@ public class ARController : MonoBehaviour
     
     private GameObject augmentationPlane;
 
+    private int currentThread = 0;
+
     // Start is called before the first frame update
     void Start()
     {
         museumEnvironment.SetActive(false);
 
-        InstantiateMO(CommandCenter.museumSpaces.Values.ToList(), museumEnvironment.transform);
-        InstantiateMO(CommandCenter.museumExhibits.Values.ToList(), museumEnvironment.transform);
-        OrganizeMuseumSpaces(CommandCenter.museumSpaces.Values.ToList(), museumEnvironment.transform);
+        InstantiateMO(CommandCenter.museumObjects.Values.ToList(), museumEnvironment.transform);
+        OrganizeMuseumSpaces(CommandCenter.museumObjects.Values.Where(m => m.type == "space" || m.type == "place").ToList(), museumEnvironment.transform);
 
         var frustumHeight = 2.0f * 10 * Mathf.Tan(Camera.main.fieldOfView * 0.5f * Mathf.Deg2Rad) + 1f;
         var frustumWidth = frustumHeight * Camera.main.aspect;
@@ -56,6 +57,32 @@ public class ARController : MonoBehaviour
             }
         }
     }
+    private void FilterMuseumObjects(string thread)
+    {
+        if (CommandCenter.museumThreads[thread] != null)
+        {
+            foreach (MuseumObjectRep m in CommandCenter.museumObjects.Values)
+            {
+                Debug.Log(m.id);
+                if (CommandCenter.museumThreads[thread].Contains(m))
+                {
+                    m.included = true;
+                }
+                else
+                {
+                    m.included = false;
+                }
+            }
+            UpdateScreenText("Topic/Text", thread);
+        }
+    }
+    public void ChangeThread(bool next)
+    {
+        currentThread += next ? 1 : -1;
+        if (currentThread == -1) currentThread = CommandCenter.museumThreads.Count - 1;
+        if (currentThread == CommandCenter.museumThreads.Count) currentThread = 0;
+        FilterMuseumObjects(CommandCenter.museumThreads.Keys.ToList()[currentThread]);
+    }
 
     // Update is called once per frame
     void Update()
@@ -68,7 +95,7 @@ public class ARController : MonoBehaviour
             screens.transform.Find("Controls/Topic/Text").gameObject.GetComponent<TextMeshProUGUI>().text = "-";
             if (c.gameObject.name != "Selection") { continue; }
 
-            foreach (MuseumObjectRep MO in CommandCenter.museumExhibits.Values)
+            foreach (MuseumObjectRep MO in CommandCenter.museumObjects.Values)
             {
                 MO.GO.GetComponent<MuseumObjectController>().aimedAt = false;
             }
@@ -88,23 +115,12 @@ public class ARController : MonoBehaviour
             }
         }
 
-        if (CommandCenter.museumSpaces.Count > 0)
+        if (CommandCenter.currentLocation != "")
         {
-            string currentLocationId = "";
-            foreach (string zoneId in CommandCenter.currentZones)
-            {
-                if (string.Compare(zoneId, currentLocationId) > 0)
-                {
-                    currentLocationId = zoneId;
-                }
-            }
-            if (currentLocationId != "")
-            {
-                UpdateScreenText("Status/Text", CommandCenter.museumSpaces[currentLocationId].desc);
-            } else
-            {
-                UpdateScreenText("Status/Text", "Outside museum!");
-            }
+            UpdateScreenText("Status/Text", CommandCenter.museumObjects[CommandCenter.currentLocation].desc);
+        } else
+        {
+            UpdateScreenText("Status/Text", "Outside museum!");
         }
     }
 
@@ -125,21 +141,27 @@ public class ARController : MonoBehaviour
         {
             case "W":
                 newPosition += Camera.main.transform.forward * 3;
+                StartCoroutine(Alert("Moving 3m forward", 2));
                 break;
             case "A":
                 newPosition += Camera.main.transform.right * -3;
+                StartCoroutine(Alert("Moving 3m left", 2));
                 break;
             case "S":
                 newPosition += Camera.main.transform.forward * -3;
+                StartCoroutine(Alert("Moving 3m backward", 2));
                 break;
             case "D":
                 newPosition += Camera.main.transform.right * 3;
+                StartCoroutine(Alert("Moving 3m right", 2));
                 break;
             case "E":
                 newPosition += CommandCenter.DenormalizedMuseumVectors(new Vector3(0f, 0.25f, 0f), false);
+                StartCoroutine(Alert("Moving up 1 floor", 2));
                 break;
             case "C":
                 newPosition += CommandCenter.DenormalizedMuseumVectors(new Vector3(0f, -0.25f, 0f), false);
+                StartCoroutine(Alert("Moving down 1 floor", 2));
                 break;
         }
 
@@ -158,10 +180,22 @@ public class ARController : MonoBehaviour
     {
         screens.transform.Find(path).gameObject.GetComponent<TextMeshProUGUI>().text = text;
     }
+    private IEnumerator Alert(string msg, float t)
+    {
+        ToggleScreenElementVisible("Alert");
+        UpdateScreenText("Alert/Text", msg);
+        yield return new WaitForSeconds(t);
+        ToggleScreenElementVisible("Alert", false);
+    }
     private void ToggleScreenElementVisible(string path, bool visible = true)
     {
         screens.transform.Find(path).gameObject.SetActive(visible);
     }
+    public void ShowMovementControl(bool visible)
+    {
+        ToggleScreenElementVisible("Controls/Simulation", visible);
+    }
+
     private IEnumerator DemonstrationInitialScreen()
     {
         UpdateScreenText("Status/Text", "Acquiring location...");
@@ -176,14 +210,11 @@ public class ARController : MonoBehaviour
         ToggleScreenElementVisible("Topic");
         ToggleScreenElementVisible("Controls/Options");
         UpdateScreenText("Alert/Text", "Location acquired");
+
+        FilterMuseumObjects("Museum Navigation");
         yield return new WaitForSeconds(3);
 
         ToggleScreenElementVisible("Alert", false);
 
     }
-    public void ShowMovementControl(bool visible)
-    {
-        ToggleScreenElementVisible("Controls/Simulation", visible);
-    }
-
 }
