@@ -10,10 +10,12 @@ public class ARController : MonoBehaviour
     public GameObject cameraParent;
 
     public GameObject museumEnvironment;
-    public GameObject screens;
     public GameObject defaultCamLocation;
     
     private GameObject augmentationPlane;
+
+    public GameObject screens;
+    public GameObject debugOut;
 
     private int currentThread = 0;
 
@@ -63,7 +65,6 @@ public class ARController : MonoBehaviour
         {
             foreach (MuseumObjectRep m in CommandCenter.museumObjects.Values)
             {
-                Debug.Log(m.id);
                 if (CommandCenter.museumThreads[thread].Contains(m))
                 {
                     m.included = true;
@@ -83,6 +84,7 @@ public class ARController : MonoBehaviour
         if (currentThread == CommandCenter.museumThreads.Count) currentThread = 0;
         FilterMuseumObjects(CommandCenter.museumThreads.Keys.ToList()[currentThread]);
     }
+
 
     // Update is called once per frame
     void Update()
@@ -122,11 +124,13 @@ public class ARController : MonoBehaviour
         {
             UpdateScreenText("Status/Text", "Outside museum!");
         }
+
+        ScreenDebug(EnumerateTransform(museumEnvironment.transform, museumEnvironment.name + "/", 0, 3));
     }
 
     public void RelocateCamera(Transform t)
     {
-        cameraParent.transform.position = CommandCenter.DenormalizedMuseumVectors(t.position, true) - Camera.main.transform.localPosition;
+        cameraParent.transform.position = t.position - Camera.main.transform.localPosition;
     }
     public void RelocateCamera(Vector3 v, bool normalized = false)
     {
@@ -140,19 +144,19 @@ public class ARController : MonoBehaviour
         switch(direction)
         {
             case "W":
-                newPosition += Camera.main.transform.forward * 3;
+                newPosition += Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)) * 3;
                 StartCoroutine(Alert("Moving 3m forward", 2));
                 break;
             case "A":
-                newPosition += Camera.main.transform.right * -3;
+                newPosition += Vector3.Scale(Camera.main.transform.right, new Vector3(1, 0, 1)) * -3;
                 StartCoroutine(Alert("Moving 3m left", 2));
                 break;
             case "S":
-                newPosition += Camera.main.transform.forward * -3;
+                newPosition += Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)) * -3;
                 StartCoroutine(Alert("Moving 3m backward", 2));
                 break;
             case "D":
-                newPosition += Camera.main.transform.right * 3;
+                newPosition += Vector3.Scale(Camera.main.transform.right, new Vector3(1, 0, 1)) * 3;
                 StartCoroutine(Alert("Moving 3m right", 2));
                 break;
             case "E":
@@ -216,5 +220,22 @@ public class ARController : MonoBehaviour
 
         ToggleScreenElementVisible("Alert", false);
 
+    }
+
+    private string EnumerateTransform(Transform t, string basePath, int currentLevel = 0, int maxLevel = 1000)
+    {
+        if (currentLevel >= maxLevel) return "";
+        string output = "";
+        foreach (Transform c in t)
+        {
+            string newLn = basePath + c.name + "/";
+            output += newLn + "\n";
+            output += EnumerateTransform(c, newLn, currentLevel + 1, maxLevel);
+        }
+        return output;
+    } 
+    public void ScreenDebug(string msg)
+    {
+        debugOut.GetComponent<TextMeshProUGUI>().text = msg;
     }
 }

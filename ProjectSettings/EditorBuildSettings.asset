@@ -9,9 +9,6 @@ EditorBuildSettings:
     path: Assets/Scenes/Controller.unity
     guid: c01312ba9660349e8931c7606a8db800
   - enabled: 1
-    path: Assets/Scenes/3DMapScene.unity
-    guid: ca78321f616934b1e8b6997d9fcd904b
-  - enabled: 1
     path: Assets/Scenes/ARScene.unity
     guid: b8f68b5d3ba4445beaafda217b05a04c
   - enabled: 0
