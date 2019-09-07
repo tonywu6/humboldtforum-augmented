@@ -380,7 +380,6 @@
 				"boxSize": [1, 0.25, 1]
 			},
 			"type": "space",
-			"makeSign": false,
 			"description": {
 				"name": "1st Floor",
 				"desc": "1st Floor Hallway"
@@ -395,8 +394,7 @@
 				"position": [0.86286787726988102692548528490920475892298058860363, 0.25, -0.35144230769230769230769230769230769230769230769231],
 				"boxSize": [0.12930494677520350657482780212899185973700688791484, 0.25, 0.35144230769230769230769230769230769230769230769231]
 			},
-			"type": "space",
-			"makeSign": true,
+			"type": "place",
 			"description": {
 				"name": "Berlin Exhibition",
 				"desc": "Berlin exhibitions"
@@ -411,8 +409,7 @@
 				"position": [0.68659987476518472135253600500939261114589855979962, 0.25, -0.81682692307692307692307692307692307692307692307692],
 				"boxSize": [0.30463368816530995616781465247338760175328741390106, 0.25, 0.17980769230769230769230769230769230769230769230769]
 			},
-			"type": "space",
-			"makeSign": true,
+			"type": "place",
 			"description": {
 				"name": "Berlin Exhibition",
 				"desc": "Berlin exhibitions"
@@ -427,8 +424,7 @@
 				"position": [0.0394489668127739511584220413274890419536631183469, 0.25, -0.0125],
 				"boxSize": [0.37226048841577958672510958046336881653099561678147, 0.25, 0.15480769230769230769230769230769230769230769230769]
 			},
-			"type": "space",
-			"makeSign": true,
+			"type": "place",
 			"description": {
 				"name": "Humboldt Lab",
 				"desc": "Humboldt Lab"
@@ -443,8 +439,7 @@
 				"position": [0.04164057608015028177833437695679398872886662492173, 0.5, -0.01586538461538461538461538461538461538461538461538],
 				"boxSize": [0.30776455854727614276768941765810895428929242329368, 0.25, 0.15336538461538461538461538461538461538461538461538]
 			},
-			"type": "space",
-			"makeSign": true,
+			"type": "place",
 			"description": {
 				"name": "Oceania",
 				"desc": "Ethnologisches Museum"
@@ -460,7 +455,6 @@
 				"boxSize": [1, 0.25, 1]
 			},
 			"type": "space",
-			"makeSign": false,
 			"description": {
 				"name": "2nd Floor",
 				"desc": "2nd Floor Hallway"
@@ -475,8 +469,7 @@
 				"position": [0.84290544771446462116468378209142141515341264871634, 0.5, -0.19711538461538461538461538461538461538461538461538],
 				"boxSize": [0.11145898559799624295554164057608015028177833437696, 0.25, 0.6125]
 			},
-			"type": "space",
-			"makeSign": true,
+			"type": "place",
 			"description": {
 				"name": "America",
 				"desc": "Ethnologisches Museum"
@@ -492,7 +485,6 @@
 				"boxSize": [1, 0.25, 1]
 			},
 			"type": "space",
-			"makeSign": false,
 			"description": {
 				"name": "3rd Floor",
 				"desc": "3rd Floor Hallway"
@@ -507,8 +499,7 @@
 				"position": [0.04195366311834690043832185347526612398246712586099, 0.75, -0.67355769230769230769230769230769230769230769230769],
 				"boxSize": [0.11145898559799624295554164057608015028177833437696, 0.25, 0.29086538461538461538461538461538461538461538461538]
 			},
-			"type": "space",
-			"makeSign": true,
+			"type": "place",
 			"description": {
 				"name": "Museum for Asian Arts",
 				"desc": "Museum for Asian Arts"
@@ -525,7 +516,6 @@
 			},
 			"type": "space",
 
-			"makeSign": false,
 			"description": {
 				"name": "Ground Floor",
 				"desc": "Ground Floor Hallway"
@@ -541,7 +531,6 @@
 				"boxSize": [1, 1, 1]
 			},
 			"type": "space",
-			"makeSign": false,
 			"description": {
 				"name": "Humboldt Forum",
 				"desc": "Humboldt Forum"
