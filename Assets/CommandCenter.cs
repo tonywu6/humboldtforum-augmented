@@ -23,8 +23,10 @@ public class CommandCenter : MonoBehaviour
     private GameObject museumWorld;
     public Camera placeholderCam;
 
-    public static Dictionary<string, MuseumObjectMetadata> museumExhibits = new Dictionary<string, MuseumObjectMetadata>();
-    public static Dictionary<string, MuseumObjectMetadata> museumSpaces = new Dictionary<string, MuseumObjectMetadata>();
+    public static Dictionary<string, MuseumObjectRep> museumExhibits = new Dictionary<string, MuseumObjectRep>();
+    public static Dictionary<string, MuseumObjectRep> museumSpaces = new Dictionary<string, MuseumObjectRep>();
+
+    public static List<string> currentZones = new List<string>();
 
     public static Vector3 museumDimension = new Vector3(183.811f, 40f, 121.7801f);
 
@@ -48,10 +50,10 @@ public class CommandCenter : MonoBehaviour
             switch ((string)item["type"])
             {
                 case "exhibit":
-                    museumExhibits.Add(item["id"], new MuseumObjectMetadata(item));
+                    museumExhibits.Add(item["id"], new MuseumObjectRep(item));
                     break;
                 case "space":
-                    museumSpaces.Add(item["id"], new MuseumObjectMetadata(item));
+                    museumSpaces.Add(item["id"], new MuseumObjectRep(item));
                     break;
                 default:
                     print("What");
@@ -93,6 +95,11 @@ public class CommandCenter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        currentZones = new List<string>();
+        foreach (MuseumObjectRep m in museumSpaces.Values)
+        {
+            if (m.GO && m.GO.GetComponent<Positioning>().cameraIn && m.id != "root") currentZones.Add(m.id);
+        }
     }
 
     // Helpers
