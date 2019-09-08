@@ -13,11 +13,15 @@ public class ARController : MonoBehaviour
     public GameObject defaultCamLocation;
     
     private GameObject augmentationPlane;
+    public GameObject museumLocationService;
 
     public GameObject screens;
-    public GameObject debugOut;
+    private TMP_Dropdown topicDropdown;
 
-    private int currentThread = 0;
+    public GameObject debugOut;
+    private static GameObject debugOutStatic;
+
+    private bool cameraMoving;
 
     // Start is called before the first frame update
     void Start()
@@ -37,6 +41,14 @@ public class ARController : MonoBehaviour
         augmentationPlane.GetComponent<MeshCollider>().convex = true;
         augmentationPlane.GetComponent<Renderer>().enabled = false;
         //augmentationPlane.AddComponent<ReverseNormals>();
+
+        topicDropdown = screens.transform.Find("Topic").GetComponent<TMP_Dropdown>();
+        topicDropdown.ClearOptions();
+        topicDropdown.AddOptions(CommandCenter.museumThreads.Keys.ToList());
+
+        museumLocationService.GetComponent<MuseumLocationService>().UpdateLocationEvent += UpdateLocation;
+
+        debugOutStatic = debugOut;
 
         StartCoroutine(DemonstrationInitialScreen());
     }
@@ -59,8 +71,9 @@ public class ARController : MonoBehaviour
             }
         }
     }
-    private void FilterMuseumObjects(string thread)
+    public void FilterMuseumObjects(int o)
     {
+        string thread = topicDropdown.options[o].text;
         if (CommandCenter.museumThreads[thread] != null)
         {
             foreach (MuseumObjectRep m in CommandCenter.museumObjects.Values)
@@ -74,17 +87,8 @@ public class ARController : MonoBehaviour
                     m.included = false;
                 }
             }
-            UpdateScreenText("Topic/Text", thread);
         }
     }
-    public void ChangeThread(bool next)
-    {
-        currentThread += next ? 1 : -1;
-        if (currentThread == -1) currentThread = CommandCenter.museumThreads.Count - 1;
-        if (currentThread == CommandCenter.museumThreads.Count) currentThread = 0;
-        FilterMuseumObjects(CommandCenter.museumThreads.Keys.ToList()[currentThread]);
-    }
-
 
     // Update is called once per frame
     void Update()
@@ -94,7 +98,6 @@ public class ARController : MonoBehaviour
         augmentationPlane.transform.rotation = Camera.main.transform.rotation;
         foreach (Collider c in Physics.OverlapCapsule(Camera.main.transform.position, Camera.main.transform.position + Camera.main.transform.forward * 20, 0.1f, 1 << 15))
         {
-            screens.transform.Find("Controls/Topic/Text").gameObject.GetComponent<TextMeshProUGUI>().text = "-";
             if (c.gameObject.name != "Selection") { continue; }
 
             foreach (MuseumObjectRep MO in CommandCenter.museumObjects.Values)
@@ -102,7 +105,6 @@ public class ARController : MonoBehaviour
                 MO.GO.GetComponent<MuseumObjectController>().aimedAt = false;
             }
             c.gameObject.GetComponentInParent<MuseumObjectController>().aimedAt = true;
-            UpdateScreenText("Topic/Text", c.gameObject.GetComponentInParent<MuseumObjectController>().metadata.name);
             return;
         }
         if (Input.touchCount > 0)
@@ -117,24 +119,34 @@ public class ARController : MonoBehaviour
             }
         }
 
-        if (CommandCenter.currentLocation != "")
+        if (cameraMoving)
         {
-            UpdateScreenText("Status/Text", CommandCenter.museumObjects[CommandCenter.currentLocation].desc);
-        } else
+            UpdateScreenText("Status/Text", "Relocating...");
+        }
+        else
         {
-            UpdateScreenText("Status/Text", "Outside museum!");
+            if (CommandCenter.currentLocation != "")
+            {
+                UpdateScreenText("Status/Text", CommandCenter.museumObjects[CommandCenter.currentLocation].desc);
+            }
+            else
+            {
+                UpdateScreenText("Status/Text", "Outside museum!");
+            }
         }
 
-        ScreenDebug(EnumerateTransform(museumEnvironment.transform, museumEnvironment.name + "/", 0, 3));
+        //ScreenDebug(gameObject, EnumerateTransform(museumLocationService.transform, museumLocationService.name + "/", 0, 3));
     }
 
     public void RelocateCamera(Transform t)
     {
-        cameraParent.transform.position = t.position - Camera.main.transform.localPosition;
+        cameraParent.transform.position = t.position;
+        Camera.main.transform.localPosition = Vector3.zero;
     }
     public void RelocateCamera(Vector3 v, bool normalized = false)
     {
-        cameraParent.transform.position = (normalized ? CommandCenter.DenormalizedMuseumVectors(v, true) : v) - Camera.main.transform.localPosition;
+        cameraParent.transform.position = normalized ? CommandCenter.DenormalizedMuseumVectors(v, true) : v;
+        Camera.main.transform.localPosition = Vector3.zero;
     }
     public void MoveCamera(string direction)
     {
@@ -173,11 +185,24 @@ public class ARController : MonoBehaviour
     }
     private IEnumerator InterpolateCamera(Vector3 start, Vector3 end, int frames)
     {
+        cameraMoving = true;
         for (int i = 1; i <= frames; i++)
         {
             RelocateCamera(Vector3.Lerp(start, end, i / (float)frames));
             yield return null;
         }
+        cameraMoving = false;
+    }
+
+    internal void UpdateLocation(object sender, EventMessage e)
+    {
+        string exhibitId = e.msg;
+        if (!CommandCenter.museumObjects.TryGetValue(exhibitId, out MuseumObjectRep m)) return;
+
+        Vector3 cameraHeading = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1));
+        Vector3 newPosition = m.GO.transform.position - cameraHeading * 0.3f;
+
+        StartCoroutine(InterpolateCamera(cameraParent.transform.position, newPosition, 60));
     }
 
     private void UpdateScreenText(string path, string text)
@@ -215,11 +240,11 @@ public class ARController : MonoBehaviour
         ToggleScreenElementVisible("Controls/Options");
         UpdateScreenText("Alert/Text", "Location acquired");
 
-        FilterMuseumObjects("Museum Navigation");
+        FilterMuseumObjects(0);
+        topicDropdown.RefreshShownValue();
         yield return new WaitForSeconds(3);
 
         ToggleScreenElementVisible("Alert", false);
-
     }
 
     private string EnumerateTransform(Transform t, string basePath, int currentLevel = 0, int maxLevel = 1000)
@@ -228,14 +253,16 @@ public class ARController : MonoBehaviour
         string output = "";
         foreach (Transform c in t)
         {
-            string newLn = basePath + c.name + "/";
+            string newLn = c.gameObject.activeSelf + ", " + basePath + c.name + "/";
             output += newLn + "\n";
             output += EnumerateTransform(c, newLn, currentLevel + 1, maxLevel);
         }
         return output;
-    } 
-    public void ScreenDebug(string msg)
-    {
-        debugOut.GetComponent<TextMeshProUGUI>().text = msg;
     }
+    public static void ScreenDebug(GameObject o, string msg)
+    {
+        debugOutStatic.GetComponent<TextMeshProUGUI>().text = Mathf.Round(Time.time * 1000) / 1000 + (o != null ? " " + o.name + " " : "") + "\n";
+        debugOutStatic.GetComponent<TextMeshProUGUI>().text += msg + "\n";
+    }
+
 }

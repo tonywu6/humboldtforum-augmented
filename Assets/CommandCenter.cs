@@ -123,7 +123,7 @@ public class CommandCenter : MonoBehaviour
         currentZones = new List<string>();
         foreach (MuseumObjectRep m in museumObjects.Values.Where(m => m.type == "space" || m.type == "place"))
         {
-            if (m.GO && m.id != "root")
+            if (m.GO)
             {
                 if (m.GO.GetComponent<Positioning>().cameraIn)
                 {
