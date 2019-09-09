@@ -16,6 +16,9 @@ public class MuseumObjectRep
     public JSONObject relationship;
 
     internal bool included = true;
+    internal bool aimedAt;
+    internal bool sameRoomAsCamera;
+    internal string room = "";
 
     public MuseumObjectRep(JSONNode metadataJSON)
     {
