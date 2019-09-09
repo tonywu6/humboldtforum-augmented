@@ -52,6 +52,14 @@ public class CommandCenter : MonoBehaviour
             museumObjects.Add(item["id"], new MuseumObjectRep(item));
         }
 
+        foreach (MuseumObjectRep m in museumObjects.Values.Where(m => m.type == "place" || m.type == "space"))
+        {
+            foreach (string c in m.relationship["children"].AsArray.Values)
+            {
+                museumObjects[c].room = m.id;
+            }
+        }
+
         museumThreads["Museum Navigation"] = new List<MuseumObjectRep>();
         foreach (MuseumObjectRep m in museumObjects.Values.Where(m => m.type == "place"))
         {
@@ -84,6 +92,8 @@ public class CommandCenter : MonoBehaviour
                 }
             }
         }
+
+        museumThreads["My Bookmarks"] = new List<MuseumObjectRep>();
     }
 
     private IEnumerator AddSceneAndSetActive(string scene)
