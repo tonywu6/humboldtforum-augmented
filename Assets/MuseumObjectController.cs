@@ -7,7 +7,7 @@ public class MuseumObjectController : MonoBehaviour
 {
     public static GameObject museumExhibitPrefab;
 
-    private GameObject museumObjRep;
+    private GameObject museumObjDisplay;
 
     private GameObject indicator;
     private GameObject indicatorAnchor;
@@ -22,24 +22,21 @@ public class MuseumObjectController : MonoBehaviour
     internal Color accentColor;
     internal Color textColor;
 
-    internal bool aimedAt;
-
     internal MuseumObjectRep metadata;
 
     // Start is called before the first frame update
     void Start()
     {
         museumExhibitPrefab = Resources.Load<GameObject>("Prefabs/MuseumExhibit");
-        museumObjRep = Instantiate(museumExhibitPrefab);
-        museumObjRep.name = "MuseumObject";
-        museumObjRep.transform.SetParent(transform);
-        museumObjRep.transform.localPosition = Vector3.zero;
+        museumObjDisplay = Instantiate(museumExhibitPrefab);
+        museumObjDisplay.name = "MuseumObject";
+        museumObjDisplay.transform.SetParent(transform);
+        museumObjDisplay.transform.localPosition = Vector3.zero;
 
-        indicator = museumObjRep.transform.Find("Indicator").gameObject;
+        indicator = museumObjDisplay.transform.Find("Indicator").gameObject;
         indicatorAnchor = indicator.transform.Find("ScreenAnchor").gameObject;
         indicatorPin = indicator.transform.Find("Pin").gameObject;
         indicatorArrow = indicator.transform.Find("Pin/Arrow").gameObject;
-        indicatorSelection = indicator.transform.Find("Pin/Selection").gameObject;
 
         sign = indicator.transform.Find("Sign").gameObject;
         signPlate = sign.transform.Find("Plate").gameObject;
@@ -59,7 +56,7 @@ public class MuseumObjectController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if ((transform.position - Camera.main.transform.position).sqrMagnitude < 144)
+        if (ARController.cameraMoving || (transform.position - Camera.main.transform.position).sqrMagnitude < 144)
         {
             indicatorPin.GetComponent<Rigidbody>().position = indicator.transform.position;
             signPlate.GetComponent<Rigidbody>().position = indicator.transform.position;
@@ -76,6 +73,8 @@ public class MuseumObjectController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (ARController.cameraMoving) return;
+
         if (!metadata.included)
         {
             MakeVisible(false);
@@ -85,7 +84,7 @@ public class MuseumObjectController : MonoBehaviour
         if ((transform.position - Camera.main.transform.position).sqrMagnitude < 144)
         {
             indicator.transform.localPosition = Vector3.zero;
-            indicatorArrow.SetActive(true);
+            indicatorArrow.SetActive(metadata.sameRoomAsCamera);
 
             indicatorPin.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f) * Vector3.Distance(indicatorPin.transform.position, Camera.main.transform.position) / 10;
             sign.transform.localScale = new Vector3(6, 6, 1) * Vector3.Distance(indicatorPin.transform.position, Camera.main.transform.position) / 10;
@@ -111,7 +110,6 @@ public class MuseumObjectController : MonoBehaviour
         indicatorPin.transform.rotation = LeveledCameraRotation();
         sign.transform.rotation = LeveledCameraRotation();
         signPlate.transform.localScale = new Vector3(TextOf(sign).GetRenderedValues().x / 85, TextOf(sign).GetRenderedValues().y / 95, 0.02f);
-        indicatorSelection.transform.localPosition = new Vector3(0, 0, -3);
 
         //indicatorNeighborCount = signPlate.GetComponent<OverlappingDetection>().overlappingCount;
         //if (aimedAt)
@@ -125,6 +123,13 @@ public class MuseumObjectController : MonoBehaviour
         //    ToggleSign(false);
         //}
 
+        if (metadata.sameRoomAsCamera)
+        {
+            ChangeTransparency(signPlate, 1f);
+        } else
+        {
+            ChangeTransparency(signPlate, 0.6f);
+        }
         MakeVisible(true);
 
     }
@@ -134,6 +139,16 @@ public class MuseumObjectController : MonoBehaviour
         MaterialPropertyBlock propBlock = new MaterialPropertyBlock();
         Renderer r = GO.GetComponent<Renderer>();
         r.GetPropertyBlock(propBlock);
+        propBlock.SetColor("_Color", col);
+        r.SetPropertyBlock(propBlock);
+    }
+    private void ChangeTransparency(GameObject GO, float t)
+    {
+        MaterialPropertyBlock propBlock = new MaterialPropertyBlock();
+        Renderer r = GO.GetComponent<Renderer>();
+        r.GetPropertyBlock(propBlock);
+        Color col = propBlock.GetColor("_Color");
+        col.a = t;
         propBlock.SetColor("_Color", col);
         r.SetPropertyBlock(propBlock);
     }
@@ -154,7 +169,7 @@ public class MuseumObjectController : MonoBehaviour
     {
         for (int i = 0; i < 60; i++) 
         {
-            if (aimedAt)
+            if (metadata.aimedAt)
             {
                 ToggleSign();
                 yield break;
