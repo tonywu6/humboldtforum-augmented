@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class ARController : MonoBehaviour
@@ -10,18 +12,26 @@ public class ARController : MonoBehaviour
     public GameObject cameraParent;
 
     public GameObject museumEnvironment;
+
     public GameObject defaultCamLocation;
-    
-    private GameObject augmentationPlane;
     public GameObject museumLocationService;
 
+    private GameObject augmentationPlane;
+
     public GameObject screens;
+    public GameObject floorNav;
+
+    private GameObject inquiryModule;
     private TMP_Dropdown topicDropdown;
+    private TMP_Dropdown exhibitDropdown;
+    private TMP_Dropdown.OptionData bookmarkOption = new TMP_Dropdown.OptionData("My Bookmarks");
 
     public GameObject debugOut;
     private static GameObject debugOutStatic;
 
-    private bool cameraMoving;
+    public static bool cameraMoving;
+
+    private MuseumObjectRep inquiredMuseumObject;
 
     // Start is called before the first frame update
     void Start()
@@ -46,9 +56,18 @@ public class ARController : MonoBehaviour
         topicDropdown.ClearOptions();
         topicDropdown.AddOptions(CommandCenter.museumThreads.Keys.ToList());
 
+        exhibitDropdown = screens.transform.Find("Exhibit").GetComponent<TMP_Dropdown>();
+        exhibitDropdown.ClearOptions();
+
+        inquiryModule = screens.transform.Find("Inquiry").gameObject;
+
         museumLocationService.GetComponent<MuseumLocationService>().UpdateLocationEvent += UpdateLocation;
 
+        floorNav.transform.parent = museumEnvironment.transform;
+
         debugOutStatic = debugOut;
+
+        Input.location.Start();
 
         StartCoroutine(DemonstrationInitialScreen());
     }
@@ -71,52 +90,42 @@ public class ARController : MonoBehaviour
             }
         }
     }
-    public void FilterMuseumObjects(int o)
+    private void FilterMuseumObjects(string thread)
     {
-        string thread = topicDropdown.options[o].text;
-        if (CommandCenter.museumThreads[thread] != null)
+        foreach (MuseumObjectRep m in CommandCenter.museumObjects.Values)
         {
-            foreach (MuseumObjectRep m in CommandCenter.museumObjects.Values)
+            if (CommandCenter.museumThreads[thread].Contains(m))
             {
-                if (CommandCenter.museumThreads[thread].Contains(m))
-                {
-                    m.included = true;
-                }
-                else
-                {
-                    m.included = false;
-                }
+                m.included = true;
+            }
+            else
+            {
+                m.included = false;
             }
         }
+
+        exhibitDropdown.ClearOptions();
+        exhibitDropdown.AddOptions(CommandCenter.museumThreads[thread].Select(m => m.name).ToList());
+        UpdateFloorNav(exhibitDropdown.value);
     }
 
     // Update is called once per frame
     void Update()
     {
+        museumEnvironment.transform.rotation = Quaternion.Euler(0, -Input.compass.trueHeading, 0);
+        //ScreenDebug(gameObject, museumEnvironment.transform.rotation.eulerAngles.ToString());
         //augmentationPlane.transform.LookAt(Camera.main.transform.position);
         augmentationPlane.transform.position = Camera.main.transform.position + Camera.main.transform.forward * 10;
         augmentationPlane.transform.rotation = Camera.main.transform.rotation;
-        foreach (Collider c in Physics.OverlapCapsule(Camera.main.transform.position, Camera.main.transform.position + Camera.main.transform.forward * 20, 0.1f, 1 << 15))
-        {
-            if (c.gameObject.name != "Selection") { continue; }
 
-            foreach (MuseumObjectRep MO in CommandCenter.museumObjects.Values)
-            {
-                MO.GO.GetComponent<MuseumObjectController>().aimedAt = false;
-            }
-            c.gameObject.GetComponentInParent<MuseumObjectController>().aimedAt = true;
-            return;
-        }
-        if (Input.touchCount > 0)
+        floorNav.transform.position = Camera.main.transform.position - Vector3.up * 1f;
+
+        if (CommandCenter.museumThreads["My Bookmarks"].Count == 0)
         {
-            Touch touch = Input.GetTouch(0);
-            Physics.Raycast(Camera.main.ScreenPointToRay(touch.position), out RaycastHit hit);
-            if (hit.collider.gameObject.GetComponentInParent<MuseumObjectController>())
-            {
-                MuseumObjectController MOC = hit.collider.gameObject.GetComponentInParent<MuseumObjectController>();
-                ToggleScreenElementVisible("Desc");
-                UpdateScreenText("Desc/Text", MOC.metadata.desc);
-            }
+            topicDropdown.options.RemoveAll(d => d.text == "My Bookmarks");
+        } else if (!topicDropdown.options.Contains(bookmarkOption))
+        {
+            topicDropdown.options.Add(bookmarkOption);
         }
 
         if (cameraMoving)
@@ -133,6 +142,30 @@ public class ARController : MonoBehaviour
             {
                 UpdateScreenText("Status/Text", "Outside museum!");
             }
+        }
+
+        foreach (MuseumObjectRep m in CommandCenter.museumObjects.Values.Where(m => m.type == "exhibit"))
+        {
+            m.sameRoomAsCamera = m.room == CommandCenter.currentLocation;
+        }
+
+        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hit, Mathf.Infinity, 1 << 10))
+        {
+            inquiredMuseumObject = hit.collider.gameObject.GetComponentInParent<MuseumObjectController>().metadata;
+            if (CommandCenter.museumThreads["My Bookmarks"].Contains(inquiredMuseumObject))
+            {
+                inquiryModule.transform.Find("Button-AddBookmark").gameObject.SetActive(false);
+                inquiryModule.transform.Find("Button-DeleteBookmark").gameObject.SetActive(true);
+            } else
+            {
+                inquiryModule.transform.Find("Button-AddBookmark").gameObject.SetActive(true);
+                inquiryModule.transform.Find("Button-DeleteBookmark").gameObject.SetActive(false);
+            }
+            inquiryModule.SetActive(true);
+        } else
+        {
+            inquiredMuseumObject = null;
+            inquiryModule.SetActive(false);
         }
 
         //ScreenDebug(gameObject, EnumerateTransform(museumLocationService.transform, museumLocationService.name + "/", 0, 3));
@@ -220,15 +253,54 @@ public class ARController : MonoBehaviour
     {
         screens.transform.Find(path).gameObject.SetActive(visible);
     }
+
+    public void Bookmark(bool add)
+    {
+        if (add)
+        {
+            CommandCenter.museumThreads["My Bookmarks"].Add(inquiredMuseumObject);
+        } else
+        {
+            CommandCenter.museumThreads["My Bookmarks"].Remove(inquiredMuseumObject);
+            FilterMuseumObjects(topicDropdown.captionText.text);
+        }
+    }
+    public void ShowDescription(bool visible)
+    {
+        if (visible) UpdateScreenText("Desc/Text", inquiredMuseumObject.desc);
+        ToggleScreenElementVisible("Desc", visible);
+    }
     public void ShowMovementControl(bool visible)
     {
         ToggleScreenElementVisible("Controls/Simulation", visible);
+    }
+    public void UpdateMuseumObjectFilter(int o)
+    {
+        string thread = topicDropdown.options[o].text;
+        if (CommandCenter.museumThreads[thread] != null) FilterMuseumObjects(thread);
+    }
+    public void UpdateFloorNav(int o)
+    {
+        string thread = topicDropdown.captionText.text;
+        if (CommandCenter.museumThreads.TryGetValue(thread, out List<MuseumObjectRep> t) && t.Count > 0)
+        {
+            MuseumObjectRep m = CommandCenter.museumThreads[thread][o];
+            MuseumObjectRep r = CommandCenter.museumObjects[m.room];
+
+            floorNav.GetComponent<FloorNavController>().m = m;
+            floorNav.GetComponent<FloorNavController>().r = r;
+        } else
+        {
+            floorNav.GetComponent<FloorNavController>().m = null;
+            floorNav.GetComponent<FloorNavController>().r = null;
+        }
     }
 
     private IEnumerator DemonstrationInitialScreen()
     {
         UpdateScreenText("Status/Text", "Acquiring location...");
         ToggleScreenElementVisible("Topic", false);
+        ToggleScreenElementVisible("Exhibit", false);
         UpdateScreenText("Alert/Text", "Please slowly move your phone around...");
         ToggleScreenElementVisible("Controls/Options", false);
         RelocateCamera(defaultCamLocation.transform.position);
@@ -237,13 +309,15 @@ public class ARController : MonoBehaviour
 
         museumEnvironment.SetActive(true);
         ToggleScreenElementVisible("Topic");
+        ToggleScreenElementVisible("Exhibit");
         ToggleScreenElementVisible("Controls/Options");
         UpdateScreenText("Alert/Text", "Location acquired");
 
-        FilterMuseumObjects(0);
+        FilterMuseumObjects("Museum Navigation");
         topicDropdown.RefreshShownValue();
         yield return new WaitForSeconds(3);
 
+        floorNav.SetActive(true);
         ToggleScreenElementVisible("Alert", false);
     }
 
