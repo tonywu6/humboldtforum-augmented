@@ -13,7 +13,7 @@ This repo is derived from the course final project, which was a group project wi
 
 ## Demo
 
-(If videos are not showing please turn to the repo's [GitHub Page](https://monotony113.github.io/nyu-ima-humboldtforum-augmented/))
+(If videos are not showing please turn to the repo's [GitHub Pages](https://tonywu6.github.io/humboldtforum-augmented/))
 
 Initial screen:
 <video width="270" height="480" controls>
